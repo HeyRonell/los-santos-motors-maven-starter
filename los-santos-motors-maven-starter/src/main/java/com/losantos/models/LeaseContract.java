@@ -35,7 +35,7 @@ public class LeaseContract extends Contract {
         return monthlyPayment;
     }
 
-    public static boolean isEligible() {
+    public static boolean isEligible(Vehicle vehicle) {
 
         boolean isEligible = false;
 
