@@ -20,31 +20,46 @@ public class SalesContract extends Contract {
 
     @Override
     public double getTotalPrice() {
-        // TODO: vehicle price + 5% tax + $100 recording fee + processing fee.
+        // vehicle price + 5% tax + $100 recording fee + processing fee
         double vehiclePrice = getVehicle().getPrice();
-        double salesTax = vehiclePrice * .10;
+        double salesTax = vehiclePrice * .05;
         int recordingFee = 100;
         double processingFee = (vehiclePrice < 10000) ? 295.0 : 495.0;
         return vehiclePrice + salesTax + recordingFee + processingFee;
-        //throw new UnsupportedOperationException("MISSION 2: Implement sales payment");
-
     }
 
     @Override
     public double getMonthlyPayment() {
-        // TODO: return 0 when not financed; otherwise amortize the full total.
-        //throw new UnsupportedOperationException("MISSION 2: Implement sales payment");
+        // return 0 when not financed; otherwise amortize the full total
+        if (!finance) {
+            return 0;
+        }
+
         double totalAmount = getTotalPrice();
         double vehiclePrice = getVehicle().getPrice();
 
-        // financing info lets use a standard 5% interest 48-Month Term, 4% for 24-month
+        // financing info: 5% for 48 months, 4% for 24 months
         double interestRate;
         int months;
 
-        if (vehiclePrice >= 10000){
+        if (vehiclePrice >= 10000) {
             interestRate = .05;
             months = 48;
+        } else {
+            interestRate = .04;
+            months = 24;
         }
 
+        // Formula for standard loans
+        // monthly = P × r / (1 − (1 + r)^(−n))
+        // P = amount being financed r = monthly interest rate n = number of months
+        double P = totalAmount;
+        double r = interestRate / 12;
+        int n = months;
+        // num/denom  P × r  / 1 - (1 + r)^(-n)
+        double numerator = P * r;
+        double denominator = 1 - Math.pow(1 + r, -n);
 
-
+        return numerator / denominator;
+    }
+}
