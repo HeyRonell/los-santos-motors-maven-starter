@@ -1,5 +1,4 @@
 package com.losantos.models;
-
 /** MISSION 1: Base class for all completed vehicle transactions. */
 public abstract class Contract {
     private String date;
