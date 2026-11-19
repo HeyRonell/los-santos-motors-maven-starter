@@ -162,6 +162,6 @@ public class UserInterface {
 
         // 8. Only after successful contract save, update vehicle inventory.
         // Think about what should happen if updating inventory fails.
-        System.out.println("MISSION 5 is not implemented yet. See README.md.");
+
     }
 }
