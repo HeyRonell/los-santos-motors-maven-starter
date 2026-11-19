@@ -9,7 +9,10 @@ public class LeaseContract extends Contract {
     @Override
     public double getTotalPrice() {
         // TODO: price - 50% expected ending value + 7% lease fee.
-        throw new UnsupportedOperationException("MISSION 3: Implement lease total");
+        double price = getVehicle().getPrice();
+        double endingValue = price * 0.50; // 50% expected ending value
+        double leaseFee = price * 0.07; // lease fee
+        return price - endingValue + leaseFee;
     }
 
     @Override
