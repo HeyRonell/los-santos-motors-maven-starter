@@ -2,6 +2,9 @@ package com.losantos.ui;
 
 import com.losantos.data.ContractFileManager;
 import com.losantos.data.InventoryFileManager;
+import com.losantos.models.Contract;
+import com.losantos.models.LeaseContract;
+import com.losantos.models.SalesContract;
 import com.losantos.models.Vehicle;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -107,14 +110,56 @@ public class UserInterface {
     }
 
     private void sellOrLeaseVehicle() throws IOException {
+
+
         // MISSION 5: Implement the complete user interaction here.
         // 1. Ask for VIN and locate vehicle via findByVin().
         // 2. Ask for customer details and SALE/LEASE choice.
         // 3. Validate lease age using java.time.Year.now().getValue().
         // 4. For a sale, ask about financing.
+
         // 5. Create SalesContract OR LeaseContract (store in Contract variable).
+
+        Contract contract;
+
+        if (choice.equalsIgnoreCase("LEASE")) {
+            contract = new LeaseContract(date,
+                    customerName,
+                    customerEmail,
+                    vehicle);
+        } else {
+            contract = new SalesContract(date,
+                    customerName,
+                    customerEmail,
+                    vehicle,
+                    finance);
+        }
+
         // 6. Print getTotalPrice() and getMonthlyPayment().
+
+        System.out.printf("Total Price: $%.2f%n",
+                contract.getTotalPrice());
+
+        System.out.printf("Monthly Payment: $%.2f%n",
+                contract.getMonthlyPayment());
+
+
         // 7. Save with contractFileManager.saveContract(contract).
+
+        contractFileManager.saveContract(contract);
+
+        System.out.println("Contract saved successfully!");
+
+        List <Vehicle> updated = new ArrayList<>(inventory);
+
+        updated.remove(vehicle);
+
+        inventoryFileManager.saveVehicles(updated);
+
+        inventory = updated;
+
+        System.out.println("Vehicle removed from inventory successfully!");
+
         // 8. Only after successful contract save, update vehicle inventory.
         // Think about what should happen if updating inventory fails.
         System.out.println("MISSION 5 is not implemented yet. See README.md.");
