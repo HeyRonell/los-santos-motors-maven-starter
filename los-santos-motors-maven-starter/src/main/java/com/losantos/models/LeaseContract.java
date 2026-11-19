@@ -1,7 +1,5 @@
 package com.losantos.models;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.*;
 
 /** MISSION 3: Calculate the lease amount and its 36-month payment. */
@@ -39,9 +37,9 @@ public class LeaseContract extends Contract {
 
         boolean isEligible = false;
 
-        int currentYear = Year.now().getValue();
+        int currentYear = Year.now().getValue(); // pulling the current year
 
-        int vehicleYear = vehicle.getYear(); // current vehicle instance is not being pulled.
+        int vehicleYear = vehicle.getYear(); // accessing the year of the vehicle
 
         int vehicleAge = currentYear - vehicleYear;
 
