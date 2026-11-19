@@ -10,18 +10,41 @@ public class SalesContract extends Contract {
         this.finance = finance;
     }
 
-    public boolean isFinance() { return finance; }
-    public void setFinance(boolean finance) { this.finance = finance; }
+    public boolean isFinance() {
+        return finance;
+    }
+
+    public void setFinance(boolean finance) {
+        this.finance = finance;
+    }
 
     @Override
     public double getTotalPrice() {
         // TODO: vehicle price + 5% tax + $100 recording fee + processing fee.
-        throw new UnsupportedOperationException("MISSION 2: Implement sales total");
+        double vehiclePrice = getVehicle().getPrice();
+        double salesTax = vehiclePrice * .10;
+        int recordingFee = 100;
+        double processingFee = (vehiclePrice < 10000) ? 295.0 : 495.0;
+        return vehiclePrice + salesTax + recordingFee + processingFee;
+        //throw new UnsupportedOperationException("MISSION 2: Implement sales payment");
+
     }
 
     @Override
     public double getMonthlyPayment() {
         // TODO: return 0 when not financed; otherwise amortize the full total.
-        throw new UnsupportedOperationException("MISSION 2: Implement sales payment");
-    }
-}
+        //throw new UnsupportedOperationException("MISSION 2: Implement sales payment");
+        double totalAmount = getTotalPrice();
+        double vehiclePrice = getVehicle().getPrice();
+
+        // financing info lets use a standard 5% interest 48-Month Term, 4% for 24-month
+        double interestRate;
+        int months;
+
+        if (vehiclePrice >= 10000){
+            interestRate = .05;
+            months = 48;
+        }
+
+
+
