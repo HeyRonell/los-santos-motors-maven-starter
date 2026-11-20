@@ -114,27 +114,62 @@ public class UserInterface {
 
         // MISSION 5: Implement the complete user interaction here.
         // 1. Ask for VIN and locate vehicle via findByVin().
+        String vin = ask("Enter vehicle VIN: ");
+        Vehicle vehicle = findByVin(vin);
+
+        if (vehicle == null) {
+            System.out.println("Vehicle not found.");
+            return;
+        }
+
+        System.out.println("Selected vehicle: " + vehicle);
         // 2. Ask for customer details and SALE/LEASE choice.
+
+        String date = ask("Enter contract date: ");
+        String customerName = ask("Enter customer name: ");
+        String customerEmail = ask("Enter customer email: ");
+        String choice = ask("Enter SALE or LEASE: ");
+
+        // Validate contract choice
+        if (!choice.equalsIgnoreCase("SALE")
+                && !choice.equalsIgnoreCase("LEASE")) {
+            System.out.println("Invalid choice.");
+            return;
+        }
         // 3. Validate lease age using java.time.Year.now().getValue().
+        if (choice.equalsIgnoreCase("LEASE")) {
+
+            int currentYear = java.time.Year.now().getValue();
+
+            int vehicleAge = currentYear - vehicle.getYear();
+
+            if (vehicleAge > 3) {
+                System.out.println("Vehicle is too old to lease.");
+                return;
+            }
+        }
+
         // 4. For a sale, ask about financing.
 
+        boolean finance = false;
+
+        if (choice.equalsIgnoreCase("SALE")) {
+            String answer = ask("Finance vehicle? (yes/no): ");
+            finance = answer.equalsIgnoreCase("yes");
+        }
         // 5. Create SalesContract OR LeaseContract (store in Contract variable).
 
         Contract contract;
 
         if (choice.equalsIgnoreCase("LEASE")) {
-            contract = new LeaseContract(date,
-                    customerName,
-                    customerEmail,
-                    vehicle);
+            contract = new LeaseContract(
+                    date, customerName, customerEmail, vehicle
+            );
         } else {
-            contract = new SalesContract(date,
-                    customerName,
-                    customerEmail,
-                    vehicle,
-                    finance);
+            contract = new SalesContract(
+                    date, customerName, customerEmail, vehicle, finance
+            );
         }
-
         // 6. Print getTotalPrice() and getMonthlyPayment().
 
         System.out.printf("Total Price: $%.2f%n",
@@ -160,7 +195,7 @@ public class UserInterface {
 
         System.out.println("Vehicle removed from inventory successfully!");
 
-        // 8. Only after successful contract save, update vehicle inventory.
+        // 8. Only after successful contract save, update vehicle inventory
         // Think about what should happen if updating inventory fails.
 
     }

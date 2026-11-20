@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="los-santos-motors (1)" />
         <module name="los-santos-motors" />
       </profile>
     </annotationProcessing>
