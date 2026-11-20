@@ -125,7 +125,6 @@ public class UserInterface {
         String name = safeField("Customer name: ");
         String email = safeField("Customer email: ");
         String choice = ask("SALE or LEASE? ");
-
         String date = LocalDate.now().toString();
         Contract contract;
 
