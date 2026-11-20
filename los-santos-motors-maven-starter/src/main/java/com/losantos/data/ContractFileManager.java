@@ -71,10 +71,5 @@ public class ContractFileManager {
 
         Files.writeString(file, record + System.lineSeparator(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
-        // TODO: use instanceof to distinguish SalesContract from LeaseContract.
-        // TODO: format ALL required common and contract-specific fields separated by '|'.
-        // TODO: append one record using Files.writeString(..., CREATE, APPEND).
-        // IMPORTANT: do NOT overwrite older records.
-//        throw new UnsupportedOperationException("MISSION 4: Implement contract persistence");
     }
 }
