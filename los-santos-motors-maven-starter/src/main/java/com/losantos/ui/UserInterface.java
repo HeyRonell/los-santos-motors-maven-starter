@@ -197,6 +197,7 @@ public class UserInterface {
 
         // 8. Only after successful contract save, update vehicle inventory
         // Think about what should happen if updating inventory fails.
+        //test
 
     }
 }
