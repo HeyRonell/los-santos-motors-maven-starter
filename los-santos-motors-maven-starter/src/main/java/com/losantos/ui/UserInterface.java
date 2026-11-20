@@ -195,7 +195,7 @@ public class UserInterface {
 
         System.out.println("Vehicle removed from inventory successfully!");
 
-        // 8. Only after successful contract save, update vehicle inventory.
+        // 8. Only after successful contract save, update vehicle inventory
         // Think about what should happen if updating inventory fails.
 
     }
