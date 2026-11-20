@@ -3,7 +3,6 @@ package com.losantos.data;
 import com.losantos.models.Contract;
 import com.losantos.models.LeaseContract;
 import com.losantos.models.SalesContract;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,11 +29,39 @@ public class ContractFileManager {
                 + contract.getDate() + "|"
                 + contract.getCustomerName() + "|"
                 + contract.getCustomerEmail() + "|"
-                + contract.getVehicle().toFileRecord();
-        if (contract instanceof SalesContract sale) {
-            record += "|" + sale.isFinance();
+                + contract.getVehicle().toFileRecord().substring(
+                0,
+                contract.getVehicle().toFileRecord().lastIndexOf("|") + 1
+        )
+                + String.format(java.util.Locale.US, "%.2f",
+                contract.getVehicle().getPrice());
+        double vehiclePrice = contract.getVehicle().getPrice();
+
+        if(contract instanceof SalesContract sale) {
+            double salesTax = vehiclePrice * 0.05;
+            double recordingFee = 100.00;
+            double processFee;
+
+            if (vehiclePrice < 10000) {
+                processFee = 295.00;
+            } else {
+                processFee = 495.00;
+            }
+            record += "|" + String.format(java.util.Locale.US, "%.2f", salesTax);
+            record += "|" + String.format(java.util.Locale.US, "%.2f", recordingFee);
+            record += "|" + String.format(java.util.Locale.US, "%.2f", processFee);
+            record += "|" + String.format(java.util.Locale.US, "%.2f", sale.getTotalPrice());
+            record += "|" + (sale.isFinance() ? "YES" : "NO");
+            record += "|" + String.format(java.util.Locale.US, "%.2f", sale.getMonthlyPayment());
+        } else if (contract instanceof LeaseContract lease) {
+            double endingValue = vehiclePrice * 0.50;
+            double leasingFee = vehiclePrice * 0.07;
+            record += "|" + String.format(java.util.Locale.US, "%.2f", endingValue);
+            record += "|" + String.format(java.util.Locale.US, "%.2f", leasingFee);
+            record += "|" + String.format(java.util.Locale.US, "%.2f", lease.getTotalPrice());
+            record += "|" + String.format(java.util.Locale.US, "%.2f", lease.getMonthlyPayment());
+            
         }
-        record += "|" + contract.getTotalPrice() + "|" + contract.getMonthlyPayment();
 
         Path parent = file.getParent();
 
