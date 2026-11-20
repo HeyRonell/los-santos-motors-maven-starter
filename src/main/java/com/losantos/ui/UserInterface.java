@@ -128,7 +128,9 @@ public class UserInterface {
 
         String date = LocalDate.now().toString();
         Contract contract;
+
         // 3. Validate lease age using java.time.Year.now().getValue().
+
         if (choice.equalsIgnoreCase("LEASE")) {
             int age = Year.now().getValue() - vehicle.getYear();
             if (age > 3) {
