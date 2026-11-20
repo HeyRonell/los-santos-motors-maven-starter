@@ -2,9 +2,13 @@ package com.losantos.ui;
 
 import com.losantos.data.ContractFileManager;
 import com.losantos.data.InventoryFileManager;
+import com.losantos.models.Contract;
+import com.losantos.models.LeaseContract;
 import com.losantos.models.Vehicle;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -55,7 +59,8 @@ public class UserInterface {
     }
 
     private void browse() {
-        if (inventory.isEmpty()) { System.out.println("Showroom is empty."); return;
+        if (inventory.isEmpty()) { System.out.println("Showroom is empty.");
+            return;
         }
         inventory.forEach(System.out::println);
     }
@@ -72,7 +77,8 @@ public class UserInterface {
     private void addVehicle() throws IOException {
         String vin = ask("VIN: ");
         if (vin.isBlank() || vin.contains("|")) throw new IllegalArgumentException("Invalid VIN.");
-        if (findByVin(vin) != null) { System.out.println("VIN already exists."); return; }
+        if (findByVin(vin) != null) { System.out.println("VIN already exists.");
+            return; }
         int year = Integer.parseInt(ask("Year: "));
         String make = safeField("Make: ");
         String model = safeField("Model: ");
@@ -92,10 +98,10 @@ public class UserInterface {
 
     private String safeField(String label) {
         String field = ask(label);
-        if (field.isBlank() || field.contains("|")) throw new IllegalArgumentException("Invalid field value.");
+        if (field.isBlank() || field.contains("|")) throw new IllegalArgumentException
+                ("Invalid field value.");
         return field;
     }
-
     private void removeVehicle() throws IOException {
         Vehicle found = findByVin(ask("VIN: "));
         if (found == null) { System.out.println("Vehicle not found."); return; }
@@ -105,13 +111,50 @@ public class UserInterface {
         inventory = updated;
         System.out.println("Vehicle removed.");
     }
-
     private void sellOrLeaseVehicle() throws IOException {
         // MISSION 5: Implement the complete user interaction here.
-        // 1. Ask for VIN and locate vehicle via findByVin().
-        // 2. Ask for customer details and SALE/LEASE choice.
+        // 1. Ask for VIN and locate vehicle via findByVin()
+        String vin=" please enter the vin";
+        Vehicle vehicle = findByVin(vin);
+        if (vehicle == null) {
+            System.out.println("Vehicle not found.");
+            return;
+        }
+        System.out.println("Vehicle found: " + vehicle);
+        // 2. Ask for customer details and SALE/LEASE choice
+        String name = safeField("Customer name: ");
+        String email = safeField("Customer email: ");
+        String choice = ask("SALE or LEASE? ");
+
+        String date = LocalDate.now().toString();
+        Contract contract;
+
         // 3. Validate lease age using java.time.Year.now().getValue().
-        // 4. For a sale, ask about financing.
+
+        if (choice.equalsIgnoreCase("LEASE")) {
+            int age = Year.now().getValue() - vehicle.getYear();
+            if (age > 3) {
+                System.out.println("Vehicle is too old to lease.");
+                return;
+            }
+            contract = new LeaseContract(
+                    date, name, email, vehicle
+            );
+        } else if
+        (
+                choice.equalsIgnoreCase("SALE")) {
+
+        }
+        // 4. For a sale, ask about financing
+        String answer = ask("Do you want financing? Y/N: ");
+
+        if (!answer.equalsIgnoreCase("Y")
+                && !answer.equalsIgnoreCase("N")) {
+            System.out.println("Please enter Y or N.");
+            return;
+        }
+
+        boolean finance = answer.equalsIgnoreCase("Y");
         // 5. Create SalesContract OR LeaseContract (store in Contract variable).
         // 6. Print getTotalPrice() and getMonthlyPayment().
         // 7. Save with contractFileManager.saveContract(contract).
